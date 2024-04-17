@@ -1,4 +1,4 @@
 name: 3IXBuilding
 version: '${version}'
-main: dev.thebjoredcraft.ixbuilding._3IXBuilding
+main: dev.thebjoredcraft.building.Building3IX
 api-version: '1.20'
