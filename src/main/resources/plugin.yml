@@ -1,0 +1,4 @@
+name: 3IXBuilding
+version: '${version}'
+main: dev.thebjoredcraft.ixbuilding._3IXBuilding
+api-version: '1.20'
