@@ -15,7 +15,7 @@ public class BuildingWorldData {
     public String displayName;
     public int id;
 
-    public BuildingWorldData(World world, @Nullable BuildingWorld buildingWorld, Player owner, List<Player> players, String displayName, int id){
+    public BuildingWorldData(@Nullable World world, @Nullable BuildingWorld buildingWorld, Player owner, List<Player> players, String displayName, int id){
         this.world = world;
         this.buildingWorld = buildingWorld;
         this.owner = owner;
@@ -23,6 +23,32 @@ public class BuildingWorldData {
         this.displayName = displayName;
         this.id = id;
     }
+
+    @Nullable
+    public BuildingWorld getBuildingWorld() {
+        return buildingWorld;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public Player getOwner() {
+        return owner;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
     public void save(){
         File datafile = new File("");
     }

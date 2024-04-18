@@ -13,12 +13,14 @@ public final class Building3IX extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        saveConfig();
         // Plugin startup logic
 
     }
 
     @Override
     public void onDisable() {
+        saveConfig();
         // Plugin shutdown logic
     }
     public static Building3IX getInstance() {
