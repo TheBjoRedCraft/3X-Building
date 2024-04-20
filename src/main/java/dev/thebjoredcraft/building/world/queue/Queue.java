@@ -3,6 +3,7 @@ package dev.thebjoredcraft.building.world.queue;
 import dev.thebjoredcraft.building.world.BuildingWorld;
 import dev.thebjoredcraft.building.world.BuildingWorldManager;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ public class Queue {
     public static void add(BuildingWorld data){
         queue.add(data);
         check();
+        remove(data);
     }
     public static boolean isEmpty(){
         return queue.isEmpty();
@@ -24,7 +26,6 @@ public class Queue {
     }
     public static void remove(BuildingWorld data){
         queue.remove(data);
-        check();
     }
     public static void list(){
         for(BuildingWorld data : queue) {
