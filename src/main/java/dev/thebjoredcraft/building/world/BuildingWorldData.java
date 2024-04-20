@@ -1,21 +1,21 @@
 package dev.thebjoredcraft.building.world;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nullable;
-import java.io.File;
 import java.util.List;
 
 public class BuildingWorldData {
     public World world;
     public @Nullable BuildingWorld buildingWorld;
-    public Player owner;
+    public OfflinePlayer owner;
     public List<Player> players;
     public String displayName;
-    public int id;
+    public Integer id;
 
-    public BuildingWorldData(@Nullable World world, @Nullable BuildingWorld buildingWorld, Player owner, List<Player> players, String displayName, int id){
+    public BuildingWorldData(@Nullable World world, @Nullable BuildingWorld buildingWorld, @Nullable OfflinePlayer owner, @Nullable List<Player> players, @Nullable String displayName, @Nullable Integer id){
         this.world = world;
         this.buildingWorld = buildingWorld;
         this.owner = owner;
@@ -37,7 +37,7 @@ public class BuildingWorldData {
         return world;
     }
 
-    public Player getOwner() {
+    public OfflinePlayer getOwner() {
         return owner;
     }
 
@@ -49,7 +49,27 @@ public class BuildingWorldData {
         return players;
     }
 
-    public void save(){
-        File datafile = new File("");
+    public void setBuildingWorld(@Nullable BuildingWorld buildingWorld) {
+        this.buildingWorld = buildingWorld;
+    }
+
+    public void setWorld(World world) {
+        this.world = world;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public void setOwner(Player owner) {
+        this.owner = owner;
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players = players;
     }
 }

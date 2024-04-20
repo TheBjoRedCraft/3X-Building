@@ -1,11 +1,12 @@
 package dev.thebjoredcraft.building.world;
 
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.HashMap;
 
 public class BuildingWorld {
     public BuildingWorldData data;
     public static int currentID;
+    public static HashMap<Integer, BuildingWorld> buildingWorlds = new HashMap<>();
 
     public BuildingWorld(BuildingWorldData data){
         this.data = data;

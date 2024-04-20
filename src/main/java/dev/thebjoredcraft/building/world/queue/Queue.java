@@ -27,8 +27,10 @@ public class Queue {
         check();
     }
     public static void list(){
-        for(BuildingWorld data : queue){
-            data.getData().getOwner().sendMessage(MiniMessage.miniMessage().deserialize("<color:#3b92d1>>> <red>" + data.getData().getDisplayName()));
+        for(BuildingWorld data : queue) {
+            if (data.getData().getOwner().isOnline()) {
+                data.getData().getOwner().getPlayer().sendMessage(MiniMessage.miniMessage().deserialize("<color:#3b92d1>>> <red>" + data.getData().getDisplayName()));
+            }
         }
     }
 }

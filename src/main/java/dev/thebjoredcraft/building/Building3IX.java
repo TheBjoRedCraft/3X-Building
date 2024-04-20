@@ -1,5 +1,6 @@
 package dev.thebjoredcraft.building;
 
+import dev.thebjoredcraft.building.world.BuildingWorldCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Building3IX extends JavaPlugin {
@@ -14,6 +15,8 @@ public final class Building3IX extends JavaPlugin {
     @Override
     public void onEnable() {
         saveConfig();
+
+        getCommand("bworld").setExecutor(new BuildingWorldCommand());
         // Plugin startup logic
 
     }
