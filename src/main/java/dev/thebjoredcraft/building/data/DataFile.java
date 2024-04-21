@@ -47,6 +47,18 @@ public class DataFile  {
         }
 
     }
+    public static void removeWorldData(BuildingWorldData data){
+        String path = "worlds." + data.getDisplayName();
+
+        if (fileConfig.contains(path)) {
+            fileConfig.set(path, null);
+            try {
+                saveFile();
+            } catch (IOException e) {
+                Console.logError(e.getMessage());
+            }
+        }
+    }
     public static HashMap<String, BuildingWorldData> getAllWorldData() {
         HashMap<String, BuildingWorldData> worldDataList = new HashMap<>();
         ConfigurationSection configSection = fileConfig.getConfigurationSection("worlds");

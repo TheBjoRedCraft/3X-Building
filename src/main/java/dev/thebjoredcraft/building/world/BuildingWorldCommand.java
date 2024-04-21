@@ -1,6 +1,8 @@
 package dev.thebjoredcraft.building.world;
 
 import dev.thebjoredcraft.building.message.MessageUtil;
+import dev.thebjoredcraft.building.world.gui.BuildingWorldCreateGUI;
+import dev.thebjoredcraft.building.world.gui.BuildingWorldVisitGUI;
 import dev.thebjoredcraft.building.world.queue.Queue;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
@@ -23,11 +25,15 @@ public class BuildingWorldCommand implements CommandExecutor {
                 BuildingWorld.setCurrentID(id);
                 Queue.add(new BuildingWorld(new BuildingWorldData(null, null, player, new ArrayList<>(), args[1], id)));
 
+            }else if(args.length == 1 && args[0].equalsIgnoreCase("create")){
+                BuildingWorldCreateGUI.open(player, null);
             }else if(args.length == 2 && args[1].equalsIgnoreCase("delete")){
                 BuildingWorldManager.delete(args[0]);
                 player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Die Bau-Welt wurde gelöscht!"));
             }else if(args.length == 2 && args[1].equalsIgnoreCase("visit") || args.length == 2 && args[1].equalsIgnoreCase("v")){
                 BuildingWorldManager.visit(player, args[0]);
+            }else if(args.length == 1 && args[0].equalsIgnoreCase("visit") || args.length == 1 && args[0].equalsIgnoreCase("v")){
+                BuildingWorldVisitGUI.openPageOne(player);
             }else if(args.length == 2 && args[1].equalsIgnoreCase("info")){
                 BuildingWorldManager.info(player, args[0]);
             }else if(args.length == 4 && args[1].equalsIgnoreCase("members") && args[2].equalsIgnoreCase("add")){

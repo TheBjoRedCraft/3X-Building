@@ -1,8 +1,10 @@
 package dev.thebjoredcraft.building.world;
 
+import dev.thebjoredcraft.building.Building3IX;
 import dev.thebjoredcraft.building.data.DataFile;
 import dev.thebjoredcraft.building.message.MessageUtil;
 import dev.thebjoredcraft.building.server.Console;
+import dev.thebjoredcraft.building.server.Debugger;
 import dev.thebjoredcraft.building.world.queue.Queue;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.title.Title;
@@ -17,10 +19,10 @@ public class BuildingWorldManager {
     public static void create(BuildingWorldData data){
         Player owner = data.getOwner().getPlayer();
 
-        owner.showTitle(Title.title(MiniMessage.miniMessage().deserialize("Bitte warte einen Moment..."), MiniMessage.miniMessage().deserialize("...Deine Welt wird erstellt!")));
+        owner.showTitle(Title.title(MiniMessage.miniMessage().deserialize("<red>Bitte warte einen Moment..."), MiniMessage.miniMessage().deserialize("...<green>Deine Welt wird erstellt!")));
         World world = Bukkit.createWorld(new WorldCreator(data.getDisplayName() + data.getId()).type(WorldType.FLAT));
 
-        owner.showTitle(Title.title(MiniMessage.miniMessage().deserialize("Bitte warte einen Moment..."), MiniMessage.miniMessage().deserialize("...Du wirst teleportiert!")));
+        owner.showTitle(Title.title(MiniMessage.miniMessage().deserialize("<red>Bitte warte einen Moment..."), MiniMessage.miniMessage().deserialize("...<green>Du wirst teleportiert!")));
         owner.teleport(world.getSpawnLocation());
 
         Queue.remove(data.getBuildingWorld());
@@ -75,21 +77,25 @@ public class BuildingWorldManager {
             }
         }
     }
-    public static void delete(String displayName){
+    public static void delete(String displayName) {
         HashMap<String, BuildingWorldData> bWorlds = DataFile.getAllWorldData();
 
-        if(bWorlds.containsKey(displayName)){
+        if (bWorlds.containsKey(displayName)) {
             BuildingWorldData data = bWorlds.get(displayName);
 
-            Bukkit.unloadWorld(data.getWorld().getName(), true);
-            Bukkit.getWorlds().remove(data.getWorld());
+            for(Player target : data.getWorld().getPlayers()){
+                World world = Bukkit.createWorld(new WorldCreator(Building3IX.getInstance().getConfig().getString("MainWorld", "")));
+                target.teleport(world.getSpawnLocation());
+            }
 
+            Bukkit.getWorlds().remove(data.getWorld());
+            Bukkit.unloadWorld(data.getWorld(), true);
             try {
                 FileUtils.deleteDirectory(data.getWorld().getWorldFolder());
             } catch (IOException e) {
                 Console.logError(e.getMessage());
             }
+            DataFile.removeWorldData(data);
         }
     }
-
 }

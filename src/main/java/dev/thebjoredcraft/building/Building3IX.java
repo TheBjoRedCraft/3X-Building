@@ -3,6 +3,8 @@ package dev.thebjoredcraft.building;
 import dev.thebjoredcraft.building.data.DataFile;
 import dev.thebjoredcraft.building.world.BuildingWorld;
 import dev.thebjoredcraft.building.world.BuildingWorldCommand;
+import dev.thebjoredcraft.building.world.gui.BuildingWorldGUIHandler;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Building3IX extends JavaPlugin {
@@ -17,9 +19,11 @@ public final class Building3IX extends JavaPlugin {
     @Override
     public void onEnable() {
         BuildingWorld.setCurrentID(DataFile.getCurrentBuildingWorldID());
-        saveConfig();
+        saveDefaultConfig();
 
         getCommand("bworld").setExecutor(new BuildingWorldCommand());
+
+        Bukkit.getPluginManager().registerEvents(new BuildingWorldGUIHandler(), this);
         // Plugin startup logic
 
     }
@@ -27,7 +31,7 @@ public final class Building3IX extends JavaPlugin {
     @Override
     public void onDisable() {
         DataFile.saveCurrentBuildingWorldID();
-        saveConfig();
+        saveDefaultConfig();
         // Plugin shutdown logic
     }
     public static Building3IX getInstance() {
