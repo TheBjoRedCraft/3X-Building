@@ -1,5 +1,4 @@
-package dev.thebjoredcraft.building.server;
-
+package dev.thebjoredcraft.building.invsee;
 /*
  * Copyright © 2024 TheBjoRedCraft. All rights reserved.
  *
@@ -13,12 +12,14 @@ package dev.thebjoredcraft.building.server;
  * penalties, and will be prosecuted to the maximum extent possible under the law.
  */
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
-public class Debugger {
-    public static void debug(String arg){
-        Console.log(arg);
-    }
-    public static void debug(Integer arg){
-        Console.log(arg);
+public class InvseeCommand implements CommandExecutor {
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        return false;
     }
 }

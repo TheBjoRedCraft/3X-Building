@@ -1,4 +1,3 @@
-package dev.thebjoredcraft.building.server;
 
 /*
  * Copyright © 2024 TheBjoRedCraft. All rights reserved.
@@ -12,13 +11,3 @@ package dev.thebjoredcraft.building.server;
  * Unauthorized use, reproduction, or distribution of this code or any portion of it may result in severe
  * penalties, and will be prosecuted to the maximum extent possible under the law.
  */
-
-
-public class Debugger {
-    public static void debug(String arg){
-        Console.log(arg);
-    }
-    public static void debug(Integer arg){
-        Console.log(arg);
-    }
-}
