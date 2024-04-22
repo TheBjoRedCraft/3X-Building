@@ -67,7 +67,7 @@ public class BuildingWorldManager {
             BuildingWorldData data = bWorlds.get(displayName);
 
             player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Bau-Welt Information"));
-            player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + ""));
+            player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + " "));
             player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + data.getDisplayName()));
             player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Besitzer: " + data.getOwner().getName()));
             player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Mitglieder:"));

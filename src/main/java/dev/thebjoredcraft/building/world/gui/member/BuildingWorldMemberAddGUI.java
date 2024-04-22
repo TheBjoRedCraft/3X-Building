@@ -1,6 +1,5 @@
-package dev.thebjoredcraft.building.world.gui;
+package dev.thebjoredcraft.building.world.gui.member;
 
-import dev.thebjoredcraft.building.data.DataFile;
 import dev.thebjoredcraft.building.message.MessageUtil;
 import dev.thebjoredcraft.building.world.BuildingWorld;
 import dev.thebjoredcraft.building.world.BuildingWorldData;
@@ -17,10 +16,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.List;
 
-public class BuildingWorldCreateGUI {
-    public static List<Player> chatInputPlayers = new ArrayList<>();
+public class BuildingWorldMemberAddGUI {
     public static Inventory gui;
     public static void open(Player player, @Nullable String name){
         gui = Bukkit.createInventory(null, 27, MiniMessage.miniMessage().deserialize("<red>Erstell eine Bau-Welt"));
@@ -59,24 +56,18 @@ public class BuildingWorldCreateGUI {
         event.setCancelled(true);
 
         if(event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.LIME_CONCRETE_POWDER){
+            int id = BuildingWorld.getCurrentID();
             String name = event.getClickedInventory().getItem(13).getItemMeta().getDisplayName();
-            if(!name.isEmpty()) {
-                int id = BuildingWorld.getCurrentID();
-                id++;
+            id ++;
 
-                BuildingWorld.setCurrentID(id);
-                Queue.add(new BuildingWorld(new BuildingWorldData(null, null, (OfflinePlayer) event.getWhoClicked(), new ArrayList<>(), name, id)));
-            }else{
-                //TODO MESSAGE
-            }
+            BuildingWorld.setCurrentID(id);
+            Queue.add(new BuildingWorld(new BuildingWorldData(null, null, (OfflinePlayer) event.getWhoClicked(), new ArrayList<>(), name, id)));
         }else if(event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.NAME_TAG){
             event.getWhoClicked().closeInventory();
-            chatInputPlayers.add((Player) event.getWhoClicked());
             event.getWhoClicked().sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Bitte gebe den Namen der Bau-Welt ein! Gebe <bold>cancel</bold> ein, um abzubrechen!"));
 
         }else if(event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.RED_CONCRETE_POWDER){
             event.getWhoClicked().closeInventory();
-
         }
     }
 }

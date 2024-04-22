@@ -16,8 +16,12 @@ public class BuildingWorldGUIHandler implements Listener {
         if(BuildingWorldCreateGUI.chatInputPlayers.contains(event.getPlayer())){
             event.setCancelled(true);
 
-            BuildingWorldCreateGUI.open(event.getPlayer(), event.getMessage().replace(" ", ""));
-            BuildingWorldCreateGUI.chatInputPlayers.remove(event.getPlayer());
+            if(!event.getMessage().isEmpty()){
+                BuildingWorldCreateGUI.open(event.getPlayer(), event.getMessage().replace(" ", ""));
+                BuildingWorldCreateGUI.chatInputPlayers.remove(event.getPlayer());
+            }else{
+                //TODO MESSAGE
+            }
         }
     }
 }
