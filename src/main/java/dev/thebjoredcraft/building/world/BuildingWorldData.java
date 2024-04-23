@@ -25,11 +25,11 @@ public class BuildingWorldData {
     public World world;
     public @Nullable BuildingWorld buildingWorld;
     public OfflinePlayer owner;
-    public List<Player> players;
+    public List<OfflinePlayer> players;
     public String displayName;
     public Integer id;
 
-    public BuildingWorldData(@Nullable World world, @Nullable BuildingWorld buildingWorld, @Nullable OfflinePlayer owner, @Nullable List<Player> players, @Nullable String displayName, @Nullable Integer id){
+    public BuildingWorldData(@Nullable World world, @Nullable BuildingWorld buildingWorld, @Nullable OfflinePlayer owner, @Nullable List<OfflinePlayer> players, @Nullable String displayName, @Nullable Integer id){
         this.world = world;
         this.buildingWorld = buildingWorld;
         this.owner = owner;
@@ -59,7 +59,7 @@ public class BuildingWorldData {
         return displayName;
     }
 
-    public List<Player> getPlayers() {
+    public List<OfflinePlayer> getPlayers() {
         return players;
     }
 
@@ -83,7 +83,7 @@ public class BuildingWorldData {
         this.owner = owner;
     }
 
-    public void setPlayers(List<Player> players) {
+    public void setPlayers(List<OfflinePlayer> players) {
         this.players = players;
     }
 }

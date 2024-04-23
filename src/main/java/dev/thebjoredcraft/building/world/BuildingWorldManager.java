@@ -52,7 +52,7 @@ public class BuildingWorldManager {
             player.teleport(data.getWorld().getSpawnLocation());
         }
     }
-    public static void addMember(Player player, String displayName){
+    public static void addMember(OfflinePlayer player, String displayName){
         HashMap<String, BuildingWorldData> bWorlds = DataFile.getAllWorldData();
 
         if(bWorlds.containsKey(displayName)){
@@ -62,7 +62,7 @@ public class BuildingWorldManager {
             DataFile.writeWorldData(data);
         }
     }
-    public static void removeMember(Player player, String displayName) {
+    public static void removeMember(OfflinePlayer player, String displayName) {
         HashMap<String, BuildingWorldData> bWorlds = DataFile.getAllWorldData();
 
         if (bWorlds.containsKey(displayName)) {
@@ -85,7 +85,7 @@ public class BuildingWorldManager {
             player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Besitzer: " + data.getOwner().getName()));
             player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Mitglieder:"));
 
-            for(Player member : data.getPlayers()){
+            for(OfflinePlayer member : data.getPlayers()){
                 player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "- " + member.getName()));
             }
         }
@@ -110,5 +110,14 @@ public class BuildingWorldManager {
             }
             DataFile.removeWorldData(data);
         }
+    }
+    public static BuildingWorld getByID(int id){
+        BuildingWorld bWorld = null;
+        for(BuildingWorldData data : DataFile.getAllWorldData().values()){
+            if(data.getId() == id){
+                bWorld = new BuildingWorld(new BuildingWorldData(data.getWorld(), data.getBuildingWorld(), data.getOwner(), data.getPlayers(), data.getDisplayName(), data.getId()));
+            }
+        }
+        return bWorld;
     }
 }

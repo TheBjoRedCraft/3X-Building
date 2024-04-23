@@ -44,7 +44,7 @@ public class DataFile  {
         List<String> uuids = new ArrayList<>();
         String path = "worlds." + data.getDisplayName();
 
-        for(Player player : data.getPlayers()){
+        for(OfflinePlayer player : data.getPlayers()){
             uuids.add(player.getUniqueId().toString());
         }
 
@@ -85,7 +85,7 @@ public class DataFile  {
                 World world = Bukkit.getWorld(fileConfig.getString(path + ".bukkitWorld"));
                 OfflinePlayer owner = Bukkit.getPlayer(UUID.fromString(fileConfig.getString(path + ".owner")));
                 List<String> playerUUIDs = fileConfig.getStringList(path + ".players");
-                List<Player> players = new ArrayList<>();
+                List<OfflinePlayer> players = new ArrayList<>();
                 int id = fileConfig.getInt(path + ".id");
 
                 for (String playerUUID : playerUUIDs) {
@@ -110,7 +110,10 @@ public class DataFile  {
         return worldDataList;
     }
     public static void saveCurrentBuildingWorldID(){
+        Building3IX.getInstance().saveResource("data.yml", false);
         fileConfig.set("worlds.currentID", BuildingWorld.getCurrentID());
+
+        Building3IX.getInstance().saveResource("data.yml", false);
     }
     public static Integer getCurrentBuildingWorldID(){
         return fileConfig.getInt("worlds.currentID");

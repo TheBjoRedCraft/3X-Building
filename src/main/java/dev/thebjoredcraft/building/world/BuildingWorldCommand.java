@@ -16,6 +16,7 @@ package dev.thebjoredcraft.building.world;
 
 import dev.thebjoredcraft.building.message.MessageUtil;
 import dev.thebjoredcraft.building.world.gui.BuildingWorldCreateGUI;
+import dev.thebjoredcraft.building.world.gui.BuildingWorldGUI;
 import dev.thebjoredcraft.building.world.gui.BuildingWorldVisitGUI;
 import dev.thebjoredcraft.building.world.queue.Queue;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -66,6 +67,8 @@ public class BuildingWorldCommand implements CommandExecutor {
                 }else{
                     player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Der Spieler wurde nicht gefunden!"));
                 }
+            }else{
+                BuildingWorldGUI.open(player);
             }
         }
         return false;

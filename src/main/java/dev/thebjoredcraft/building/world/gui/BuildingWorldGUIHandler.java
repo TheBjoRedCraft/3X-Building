@@ -14,6 +14,11 @@ package dev.thebjoredcraft.building.world.gui;
  */
 
 
+import dev.thebjoredcraft.building.message.MessageUtil;
+import dev.thebjoredcraft.building.world.gui.member.BuildingWorldMemberGUI1;
+import dev.thebjoredcraft.building.world.gui.member.BuildingWorldMemberGUI2;
+import dev.thebjoredcraft.building.world.gui.member.BuildingWorldMemberGUI3;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -24,17 +29,22 @@ public class BuildingWorldGUIHandler implements Listener {
     public void onCLick(InventoryClickEvent event){
         BuildingWorldVisitGUI.handle(event);
         BuildingWorldCreateGUI.handle(event);
+        BuildingWorldMemberGUI1.handle(event);
+        BuildingWorldMemberGUI2.handle(event);
+        BuildingWorldMemberGUI3.handle(event);
+        BuildingWorldGUI.handle(event);
     }
     @EventHandler
     public void onChat(PlayerChatEvent event){
         if(BuildingWorldCreateGUI.chatInputPlayers.contains(event.getPlayer())){
             event.setCancelled(true);
 
-            if(!event.getMessage().isEmpty()){
+            if(!event.getMessage().isEmpty() || !event.getMessage().equals("cancel") || !event.getMessage().equals("abbrechen")){
                 BuildingWorldCreateGUI.open(event.getPlayer(), event.getMessage().replace(" ", ""));
                 BuildingWorldCreateGUI.chatInputPlayers.remove(event.getPlayer());
             }else{
-                //TODO MESSAGE
+                event.getPlayer().sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Der Vorgang wurde abgebrochen!"));
+                BuildingWorldCreateGUI.chatInputPlayers.remove(event.getPlayer());
             }
         }
     }

@@ -85,7 +85,7 @@ public class BuildingWorldCreateGUI {
         }else if(event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.NAME_TAG){
             event.getWhoClicked().closeInventory();
             chatInputPlayers.add((Player) event.getWhoClicked());
-            event.getWhoClicked().sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Bitte gebe den Namen der Bau-Welt ein! Gebe <bold>cancel</bold> ein, um abzubrechen!"));
+            event.getWhoClicked().sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Bitte gebe den Namen der Bau-Welt ein! Gebe <bold>abbrechen</bold> ein, um abzubrechen!"));
 
         }else if(event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.RED_CONCRETE_POWDER){
             event.getWhoClicked().closeInventory();
