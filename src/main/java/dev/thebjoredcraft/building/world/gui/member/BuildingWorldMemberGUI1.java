@@ -23,7 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,15 +62,13 @@ public class BuildingWorldMemberGUI1 {
         }
     }
     public static ItemStack getWorldItem(BuildingWorldData data){
-        ItemStack stack = new ItemStack(Material.PLAYER_HEAD);
-        SkullMeta sMeta = (SkullMeta) stack.getItemMeta();
+        ItemStack stack = new ItemStack(Material.GRASS_BLOCK);
+        ItemMeta sMeta = stack.getItemMeta();
         List<Component> lore = new ArrayList<>();
 
         lore.add(MiniMessage.miniMessage().deserialize("<gray>Owner: " + data.getOwner().getName()));
         lore.add(MiniMessage.miniMessage().deserialize("<gray>Spieler: " + data.getWorld().getPlayerCount()));
 
-        sMeta.setOwningPlayer(data.getOwner());
-        //sMeta.displayName(MiniMessage.miniMessage().deserialize("<color:#40d1db>" + data.getDisplayName()));
         sMeta.setDisplayName(data.getDisplayName());
         sMeta.lore(lore);
 

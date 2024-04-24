@@ -14,6 +14,7 @@ package dev.thebjoredcraft.building.world;
  */
 
 
+import dev.thebjoredcraft.building.data.DataFile;
 import dev.thebjoredcraft.building.message.MessageUtil;
 import dev.thebjoredcraft.building.world.gui.BuildingWorldCreateGUI;
 import dev.thebjoredcraft.building.world.gui.BuildingWorldGUI;
@@ -34,11 +35,9 @@ public class BuildingWorldCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
         if(sender instanceof Player player) {
             if (args.length == 2 && args[0].equalsIgnoreCase("create")) {
-                int id = BuildingWorld.getCurrentID();
-                id ++;
 
-                BuildingWorld.setCurrentID(id);
-                Queue.add(new BuildingWorld(new BuildingWorldData(null, null, player, new ArrayList<>(), args[1], id)));
+                DataFile.addBuildingWorldID();
+                Queue.add(new BuildingWorld(new BuildingWorldData(null, null, player, new ArrayList<>(), args[1], DataFile.getCurrentBuildingWorldID())));
 
             }else if(args.length == 1 && args[0].equalsIgnoreCase("create")){
                 BuildingWorldCreateGUI.open(player, null);

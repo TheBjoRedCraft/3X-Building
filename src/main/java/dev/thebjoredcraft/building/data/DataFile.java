@@ -109,9 +109,12 @@ public class DataFile  {
 
         return worldDataList;
     }
-    public static void saveCurrentBuildingWorldID(){
+    public static void addBuildingWorldID(){
         Building3IX.getInstance().saveResource("data.yml", false);
-        fileConfig.set("worlds.currentID", BuildingWorld.getCurrentID());
+        int configID = fileConfig.getInt("worlds.currentID");
+        int id = configID ++;
+
+        fileConfig.set("worlds.currentID", id);
 
         Building3IX.getInstance().saveResource("data.yml", false);
     }

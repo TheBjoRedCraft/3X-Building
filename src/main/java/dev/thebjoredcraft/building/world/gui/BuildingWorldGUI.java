@@ -25,7 +25,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class BuildingWorldGUI {
     public static Inventory guiP1;
     public static void open(Player player){
-        guiP1 = Bukkit.createInventory(null, 54, MiniMessage.miniMessage().deserialize("<red>Bau-Welten"));
+        guiP1 = Bukkit.createInventory(null, 27, MiniMessage.miniMessage().deserialize("<red>Bau-Welten"));
         ItemStack visit = new ItemStack(Material.ELYTRA);
         ItemMeta vMeta = visit.getItemMeta();
 
@@ -49,6 +49,11 @@ public class BuildingWorldGUI {
 
         cMeta.displayName(MiniMessage.miniMessage().deserialize("<red>Abbrechen"));
         cancel.setItemMeta(cMeta);
+
+        guiP1.setItem(11, visit);
+        guiP1.setItem(13, bWorlds);
+        guiP1.setItem(15, members);
+        guiP1.setItem(26, cancel);
 
         player.openInventory(guiP1);
     }

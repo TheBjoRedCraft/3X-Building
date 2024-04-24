@@ -40,12 +40,11 @@ public class BuildingWorldMemberGUI2 {
             if (count != 52 && !target.equals(player)) {
                 guiP1.addItem(getPlayerItem(target, displayName));
             }
-
             ItemStack owner = new ItemStack(Material.PLAYER_HEAD);
             SkullMeta oMeta = (SkullMeta) owner.getItemMeta();
             List<Component> lore = new ArrayList<>();
 
-            lore.add(MiniMessage.miniMessage().deserialize("<gray>Clicke, um den Spieler zu entfernen!"));
+            lore.add(MiniMessage.miniMessage().deserialize("<gray>Clicke, um den Spieler zu hinzuzufügen!"));
 
             oMeta.setOwningPlayer(player);
             oMeta.displayName(MiniMessage.miniMessage().deserialize("<red>Mitglieder hinzufügen"));
@@ -53,7 +52,7 @@ public class BuildingWorldMemberGUI2 {
             oMeta.setCustomModelData(DataFile.getAllWorldData().get(displayName).getId());
 
             owner.setItemMeta(oMeta);
-            guiP1.setItem(54, owner);
+            guiP1.setItem(53, owner);
         }
         player.openInventory(guiP1);
     }

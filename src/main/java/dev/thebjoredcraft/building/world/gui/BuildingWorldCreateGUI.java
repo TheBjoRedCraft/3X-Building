@@ -14,6 +14,7 @@ package dev.thebjoredcraft.building.world.gui;
  */
 
 
+import dev.thebjoredcraft.building.data.DataFile;
 import dev.thebjoredcraft.building.message.MessageUtil;
 import dev.thebjoredcraft.building.world.BuildingWorld;
 import dev.thebjoredcraft.building.world.BuildingWorldData;
@@ -29,7 +30,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nullable;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class BuildingWorldCreateGUI {
@@ -74,11 +77,9 @@ public class BuildingWorldCreateGUI {
         if(event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.LIME_CONCRETE_POWDER){
             String name = event.getClickedInventory().getItem(13).getItemMeta().getDisplayName();
             if(!name.isEmpty()) {
-                int id = BuildingWorld.getCurrentID();
-                id++;
+                DataFile.addBuildingWorldID();
 
-                BuildingWorld.setCurrentID(id);
-                Queue.add(new BuildingWorld(new BuildingWorldData(null, null, (OfflinePlayer) event.getWhoClicked(), new ArrayList<>(), name, id)));
+                Queue.add(new BuildingWorld(new BuildingWorldData(null, null, (OfflinePlayer) event.getWhoClicked(), new ArrayList<>(), name, DataFile.getCurrentBuildingWorldID())));
             }else{
                 //TODO MESSAGE
             }
