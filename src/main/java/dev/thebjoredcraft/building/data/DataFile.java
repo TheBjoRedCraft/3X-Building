@@ -85,13 +85,13 @@ public class DataFile  {
                 String path = "worlds." + key;
                 String displayName = fileConfig.getString(path + ".displayName");
                 World world = Bukkit.getWorld(fileConfig.getString(path + ".bukkitWorld"));
-                OfflinePlayer owner = Bukkit.getPlayer(UUID.fromString(fileConfig.getString(path + ".owner")));
+                OfflinePlayer owner = Bukkit.getOfflinePlayer(UUID.fromString(fileConfig.getString(path + ".owner")));
                 List<String> playerUUIDs = fileConfig.getStringList(path + ".players");
                 List<OfflinePlayer> players = new ArrayList<>();
                 int id = fileConfig.getInt(path + ".id");
 
                 for (String playerUUID : playerUUIDs) {
-                    Player player = Bukkit.getPlayer(UUID.fromString(playerUUID));
+                    OfflinePlayer player = Bukkit.getPlayer(UUID.fromString(playerUUID));
                     if (player != null) {
                         players.add(player);
                     }

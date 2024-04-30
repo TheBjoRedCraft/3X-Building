@@ -16,6 +16,7 @@ package dev.thebjoredcraft.building.world.gui;
 
 import dev.thebjoredcraft.building.data.DataFile;
 import dev.thebjoredcraft.building.message.MessageUtil;
+import dev.thebjoredcraft.building.server.Debugger;
 import dev.thebjoredcraft.building.world.BuildingWorldData;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -38,6 +39,7 @@ public class BuildingWorldVisitGUI {
         int count = 0;
         for(BuildingWorldData data : DataFile.getAllWorldData().values()){
             count ++;
+            Debugger.debug(count);
             if(count != 54){
                 guiP1.addItem(getWorldItem(data));
             }
@@ -54,7 +56,6 @@ public class BuildingWorldVisitGUI {
         event.setCancelled(true);
 
         if(event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.PLAYER_HEAD){
-            //String buildingWorldName = MiniMessage.miniMessage().serialize(event.getCurrentItem().displayName()).replace("<color:#40d1db>", "");
             BuildingWorldData data = DataFile.getAllWorldData().get(event.getCurrentItem().getItemMeta().getDisplayName());
 
             if(data != null) {
@@ -74,7 +75,6 @@ public class BuildingWorldVisitGUI {
         lore.add(MiniMessage.miniMessage().deserialize("<gray>Spieler: " + data.getWorld().getPlayerCount()));
 
         sMeta.setOwningPlayer(data.getOwner());
-        //sMeta.displayName(MiniMessage.miniMessage().deserialize("<color:#40d1db>" + data.getDisplayName()));
         sMeta.setDisplayName(data.getDisplayName());
         sMeta.lore(lore);
 

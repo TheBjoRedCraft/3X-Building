@@ -32,13 +32,11 @@ import java.util.HashMap;
 public class BuildingWorldManager {
     public static void create(BuildingWorldData data){
         Player owner = data.getOwner().getPlayer();
-        Debugger.debug("1-title");
 
         owner.showTitle(Title.title(MiniMessage.miniMessage().deserialize("<red>Bitte warte einen Moment..."), MiniMessage.miniMessage().deserialize("...<green>Deine Welt wird erstellt!")));
         World world = Bukkit.createWorld(new WorldCreator(data.getDisplayName() + data.getId()).type(WorldType.FLAT));
 
         owner.showTitle(Title.title(MiniMessage.miniMessage().deserialize("<red>Bitte warte einen Moment..."), MiniMessage.miniMessage().deserialize("...<green>Du wirst teleportiert!")));
-        Debugger.debug("2-title");
         owner.teleport(world.getSpawnLocation());
 
         Queue.remove(data.getBuildingWorld());

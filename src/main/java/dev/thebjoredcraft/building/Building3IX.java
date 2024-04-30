@@ -15,10 +15,8 @@ package dev.thebjoredcraft.building;
 
 
 import dev.thebjoredcraft.building.data.DataFile;
-import dev.thebjoredcraft.building.logger.LoggerCommand;
-import dev.thebjoredcraft.building.speed.SpeedCommand;
 import dev.thebjoredcraft.building.world.BuildingWorldCommand;
-import dev.thebjoredcraft.building.world.gui.BuildingWorldGUIHandler;
+import dev.thebjoredcraft.building.world.BuildingWorldHandler;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -39,7 +37,7 @@ public final class Building3IX extends JavaPlugin {
 
         getCommand("bworld").setExecutor(new BuildingWorldCommand());
 
-        Bukkit.getPluginManager().registerEvents(new BuildingWorldGUIHandler(), this);
+        Bukkit.getPluginManager().registerEvents(new BuildingWorldHandler(), this);
         // Plugin startup logic
 
     }

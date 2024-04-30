@@ -1,4 +1,4 @@
-package dev.thebjoredcraft.building.world.gui;
+package dev.thebjoredcraft.building.world;
 
 /*
  * Copyright © 2024 TheBjoRedCraft. All rights reserved.
@@ -14,28 +14,33 @@ package dev.thebjoredcraft.building.world.gui;
  */
 
 
+import dev.thebjoredcraft.building.Building3IX;
 import dev.thebjoredcraft.building.data.DataFile;
 import dev.thebjoredcraft.building.message.MessageUtil;
-import dev.thebjoredcraft.building.world.BuildingWorldData;
+import dev.thebjoredcraft.building.server.Debugger;
+import dev.thebjoredcraft.building.world.gui.BuildingWorldCreateGUI;
+import dev.thebjoredcraft.building.world.gui.BuildingWorldGUI;
+import dev.thebjoredcraft.building.world.gui.BuildingWorldVisitGUI;
 import dev.thebjoredcraft.building.world.gui.member.BuildingWorldMemberGUI1;
 import dev.thebjoredcraft.building.world.gui.member.BuildingWorldMemberGUI2;
 import dev.thebjoredcraft.building.world.gui.member.BuildingWorldMemberGUI3;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BuildingWorldGUIHandler implements Listener {
+public class BuildingWorldHandler implements Listener {
     @EventHandler
     public void onCLick(InventoryClickEvent event){
         BuildingWorldVisitGUI.handle(event);
@@ -129,6 +134,25 @@ public class BuildingWorldGUIHandler implements Listener {
                         event.getPlayer().sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Du kannst hier nicht interagieren, da du kein Mitglied dieser Bau-Welt bist."));
                     }
                 }
+            }
+        }
+        if(event.getPlayer().getItemInHand().getItemMeta() != null) {
+            if (event.getPlayer().getItemInHand().getItemMeta().displayName().equals(Compass.displayName)) {
+                BuildingWorldVisitGUI.openPageOne(event.getPlayer());
+            }
+        }
+    }
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event){
+        if(event.getPlayer().getWorld().getName().contains((Building3IX.getInstance().getConfig().getString("LobbyWorld", "")))){
+            Compass.give(event.getPlayer());
+        }
+    }
+    @EventHandler
+    public void onDrop(PlayerDropItemEvent event){
+        if(event.getPlayer().getItemOnCursor().getItemMeta() != null) {
+            if (event.getItemDrop().getItemStack().getItemMeta().displayName().equals(Compass.displayName)) {
+                event.setCancelled(true);
             }
         }
     }
