@@ -13,18 +13,15 @@ package dev.thebjoredcraft.building.world;
  * penalties, and will be prosecuted to the maximum extent possible under the law.
  */
 
-
-
-import java.util.HashMap;
-
 public class BuildingWorld {
     public BuildingWorldData data;
-    public static HashMap<Integer, BuildingWorld> buildingWorlds = new HashMap<>();
 
-    public BuildingWorld(BuildingWorldData data){
+    public BuildingWorld(BuildingWorldData data, Boolean createWorld){
         this.data = data;
 
-        BuildingWorldManager.create(data);
+        if(createWorld) {
+            BuildingWorldManager.create(data);
+        }
     }
 
     public BuildingWorldData getData() {

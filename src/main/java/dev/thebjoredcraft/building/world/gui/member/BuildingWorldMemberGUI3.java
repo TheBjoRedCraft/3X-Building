@@ -13,6 +13,7 @@ package dev.thebjoredcraft.building.world.gui.member;
  */
 
 import dev.thebjoredcraft.building.data.DataFile;
+import dev.thebjoredcraft.building.server.Debugger;
 import dev.thebjoredcraft.building.world.BuildingWorldData;
 import dev.thebjoredcraft.building.world.BuildingWorldManager;
 import net.kyori.adventure.text.Component;

@@ -14,15 +14,26 @@ package dev.thebjoredcraft.building.world.gui;
  */
 
 
+import dev.thebjoredcraft.building.data.DataFile;
 import dev.thebjoredcraft.building.message.MessageUtil;
+import dev.thebjoredcraft.building.world.BuildingWorldData;
 import dev.thebjoredcraft.building.world.gui.member.BuildingWorldMemberGUI1;
 import dev.thebjoredcraft.building.world.gui.member.BuildingWorldMemberGUI2;
 import dev.thebjoredcraft.building.world.gui.member.BuildingWorldMemberGUI3;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+
+import javax.xml.crypto.Data;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BuildingWorldGUIHandler implements Listener {
     @EventHandler
@@ -39,12 +50,85 @@ public class BuildingWorldGUIHandler implements Listener {
         if(BuildingWorldCreateGUI.chatInputPlayers.contains(event.getPlayer())){
             event.setCancelled(true);
 
-            if(!event.getMessage().isEmpty() || !event.getMessage().equals("cancel") || !event.getMessage().equals("abbrechen")){
-                BuildingWorldCreateGUI.open(event.getPlayer(), event.getMessage().replace(" ", ""));
-                BuildingWorldCreateGUI.chatInputPlayers.remove(event.getPlayer());
+            if(!event.getMessage().contains("cancel")){
+                if(!event.getMessage().contains("abbrechen")){
+                    BuildingWorldCreateGUI.open(event.getPlayer(), event.getMessage().replace(" ", ""));
+                    BuildingWorldCreateGUI.chatInputPlayers.remove(event.getPlayer());
+                }else{
+                    event.getPlayer().sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Der Vorgang wurde abgebrochen!"));
+                    BuildingWorldCreateGUI.chatInputPlayers.remove(event.getPlayer());
+                }
             }else{
                 event.getPlayer().sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Der Vorgang wurde abgebrochen!"));
                 BuildingWorldCreateGUI.chatInputPlayers.remove(event.getPlayer());
+            }
+        }
+    }
+    @EventHandler
+    public void onPlace(BlockPlaceEvent event){
+        List<World> buildingWorldsBukkitWorlds = new ArrayList<>();
+        List<World> playerMemberBuildingWorlds = new ArrayList<>();
+
+        if(!event.getPlayer().hasPermission("building.world.protection.bypass")){
+            for(BuildingWorldData data : DataFile.getAllWorldData().values()){
+                buildingWorldsBukkitWorlds.add(data.getWorld());
+
+                if(data.getPlayers().contains(event.getPlayer())){
+                    playerMemberBuildingWorlds.add(event.getBlock().getWorld());
+                }
+            }
+
+            if(buildingWorldsBukkitWorlds.contains(event.getBlock().getWorld())) {
+                if (!playerMemberBuildingWorlds.contains(event.getBlock().getWorld())) {
+                    event.setCancelled(true);
+                    event.getPlayer().sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Du kannst hier nicht bauen, da du kein Mitglied dieser Bau-Welt bist."));
+                }
+            }
+        }
+    }
+    @EventHandler
+    public void onBreak(BlockBreakEvent event){
+        List<World> buildingWorldsBukkitWorlds = new ArrayList<>();
+        List<World> playerMemberBuildingWorlds = new ArrayList<>();
+
+        if(!event.getPlayer().hasPermission("building.world.protection.bypass")){
+            for(BuildingWorldData data : DataFile.getAllWorldData().values()){
+                buildingWorldsBukkitWorlds.add(data.getWorld());
+
+                if(data.getPlayers().contains(event.getPlayer())){
+                    playerMemberBuildingWorlds.add(event.getBlock().getWorld());
+                }
+            }
+
+            if(buildingWorldsBukkitWorlds.contains(event.getBlock().getWorld())) {
+                if (!playerMemberBuildingWorlds.contains(event.getBlock().getWorld())) {
+                    event.setCancelled(true);
+                    event.getPlayer().sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Du kannst hier nicht abauen, da du kein Mitglied dieser Bau-Welt bist."));
+                }
+            }
+        }
+    }
+    @EventHandler
+    public void onInteract(PlayerInteractEvent event){
+        List<World> buildingWorldsBukkitWorlds = new ArrayList<>();
+        List<World> playerMemberBuildingWorlds = new ArrayList<>();
+
+        if(!event.getPlayer().hasPermission("building.world.protection.bypass")){
+            if(event.getClickedBlock() != null) {
+                for (BuildingWorldData data : DataFile.getAllWorldData().values()) {
+                    buildingWorldsBukkitWorlds.add(data.getWorld());
+
+                    if (data.getPlayers().contains(event.getPlayer())) {
+                        playerMemberBuildingWorlds.add(event.getClickedBlock().getWorld());
+                    }
+                }
+
+                if (buildingWorldsBukkitWorlds.contains(event.getClickedBlock().getWorld())) {
+                    if (!playerMemberBuildingWorlds.contains(event.getClickedBlock().getWorld())) {
+                        event.setCancelled(true);
+                        event.getPlayer().sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Du kannst hier nicht interagieren, da du kein Mitglied dieser Bau-Welt bist."));
+                    }
+                }
             }
         }
     }

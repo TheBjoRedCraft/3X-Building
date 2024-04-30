@@ -13,6 +13,7 @@ package dev.thebjoredcraft.building.world.gui.member;
  */
 
 import dev.thebjoredcraft.building.data.DataFile;
+import dev.thebjoredcraft.building.server.Debugger;
 import dev.thebjoredcraft.building.world.BuildingWorldData;
 import dev.thebjoredcraft.building.world.BuildingWorldManager;
 import net.kyori.adventure.text.Component;
@@ -24,6 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
@@ -32,7 +34,7 @@ import java.util.List;
 public class BuildingWorldMemberGUI2 {
     public static Inventory guiP1;
     public static void open(Player player, String displayName){
-        guiP1 = Bukkit.createInventory(null, 54, MiniMessage.miniMessage().deserialize("<red>Mitglieder deiner Bau-Welt"));
+        guiP1 = Bukkit.createInventory(null, 54, MiniMessage.miniMessage().deserialize("<red>Mitglieder entfernen"));
         int count = 0;
 
         for(OfflinePlayer target : DataFile.getAllWorldData().get(displayName).getPlayers()) {
@@ -40,20 +42,19 @@ public class BuildingWorldMemberGUI2 {
             if (count != 52 && !target.equals(player)) {
                 guiP1.addItem(getPlayerItem(target, displayName));
             }
-            ItemStack owner = new ItemStack(Material.PLAYER_HEAD);
-            SkullMeta oMeta = (SkullMeta) owner.getItemMeta();
-            List<Component> lore = new ArrayList<>();
-
-            lore.add(MiniMessage.miniMessage().deserialize("<gray>Clicke, um den Spieler zu hinzuzufügen!"));
-
-            oMeta.setOwningPlayer(player);
-            oMeta.displayName(MiniMessage.miniMessage().deserialize("<red>Mitglieder hinzufügen"));
-            oMeta.lore(lore);
-            oMeta.setCustomModelData(DataFile.getAllWorldData().get(displayName).getId());
-
-            owner.setItemMeta(oMeta);
-            guiP1.setItem(53, owner);
         }
+        ItemStack owner = new ItemStack(Material.GREEN_STAINED_GLASS_PANE);
+        ItemMeta oMeta = owner.getItemMeta();
+        List<Component> lore = new ArrayList<>();
+
+        lore.add(MiniMessage.miniMessage().deserialize("<gray>Clicke, um Spieler hinzuzufügen!"));
+
+        oMeta.displayName(MiniMessage.miniMessage().deserialize("<red>Mitglieder hinzufügen"));
+        oMeta.lore(lore);
+        oMeta.setCustomModelData(DataFile.getAllWorldData().get(displayName).getId());
+
+        owner.setItemMeta(oMeta);
+        guiP1.setItem(53, owner);
         player.openInventory(guiP1);
     }
     public static void handle(InventoryClickEvent event){
@@ -64,14 +65,16 @@ public class BuildingWorldMemberGUI2 {
             return;
         }
         event.setCancelled(true);
-
         if(event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.PLAYER_HEAD){
             BuildingWorldData current = BuildingWorldManager.getByID(event.getCurrentItem().getItemMeta().getCustomModelData()).getData();
             if(!event.getCurrentItem().getItemMeta().getDisplayName().equals(event.getWhoClicked().getName())) {
                 BuildingWorldManager.removeMember(Bukkit.getOfflinePlayer(event.getCurrentItem().getItemMeta().getDisplayName()), current.getDisplayName());
+                open((Player) event.getWhoClicked(), current.getDisplayName());
             }else{
                 BuildingWorldMemberGUI3.open((Player) event.getWhoClicked(), BuildingWorldManager.getByID(event.getCurrentItem().getItemMeta().getCustomModelData()).getData().getDisplayName());
             }
+        }else{
+            BuildingWorldMemberGUI3.open((Player) event.getWhoClicked(), BuildingWorldManager.getByID(event.getCurrentItem().getItemMeta().getCustomModelData()).getData().getDisplayName());
         }
     }
     public static ItemStack getPlayerItem(OfflinePlayer player, String displayName){

@@ -41,7 +41,7 @@ public class BuildingWorldGUI {
         ItemStack members = new ItemStack(Material.PLAYER_HEAD);
         ItemMeta mMeta = members.getItemMeta();
 
-        mMeta.displayName(MiniMessage.miniMessage().deserialize("<red>Mitlgieder deiner Bau-Welten hinzufügen und entfernen"));
+        mMeta.displayName(MiniMessage.miniMessage().deserialize("<red>Mitglieder deiner Bau-Welten hinzufügen und entfernen"));
         members.setItemMeta(mMeta);
 
         ItemStack cancel = new ItemStack(Material.BARRIER);

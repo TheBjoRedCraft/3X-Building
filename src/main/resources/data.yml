@@ -1,10 +1,2 @@
 worlds:
-  currentID:
-  #example:
-    #bukkitWorld:
-    #owner:
-    #players:
-      #- <uuid>
-      #- <uuid>
-    #displayName:
-    #id:
+currentID: 0

@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'dev.thebjoredcraft'
-version = 'BETA'
+version = 'v1'
 
 repositories {
     mavenCentral()

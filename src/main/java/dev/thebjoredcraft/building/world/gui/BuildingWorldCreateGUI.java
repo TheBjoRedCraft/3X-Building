@@ -16,9 +16,11 @@ package dev.thebjoredcraft.building.world.gui;
 
 import dev.thebjoredcraft.building.data.DataFile;
 import dev.thebjoredcraft.building.message.MessageUtil;
+import dev.thebjoredcraft.building.server.Debugger;
 import dev.thebjoredcraft.building.world.BuildingWorld;
 import dev.thebjoredcraft.building.world.BuildingWorldData;
 import dev.thebjoredcraft.building.world.queue.Queue;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -30,9 +32,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nullable;
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class BuildingWorldCreateGUI {
@@ -76,12 +76,20 @@ public class BuildingWorldCreateGUI {
 
         if(event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.LIME_CONCRETE_POWDER){
             String name = event.getClickedInventory().getItem(13).getItemMeta().getDisplayName();
-            if(!name.isEmpty()) {
+            if(!event.getClickedInventory().getItem(13).getItemMeta().displayName().equals(MiniMessage.miniMessage().deserialize("<color:#40d1db>Name (Clicken zum Eingeben)"))){
                 DataFile.addBuildingWorldID();
 
-                Queue.add(new BuildingWorld(new BuildingWorldData(null, null, (OfflinePlayer) event.getWhoClicked(), new ArrayList<>(), name, DataFile.getCurrentBuildingWorldID())));
+                Queue.add(new BuildingWorld(new BuildingWorldData(null, null, (OfflinePlayer) event.getWhoClicked(), new ArrayList<>(), name, DataFile.getCurrentBuildingWorldID()), true));
+            //if(!name.contains("{") || !name.contains("}") || !name.contains("[") || !name.contains("]") || !name.contains("(") || !name.contains(")") || !name.contains("/") || !name.contains("&") || !name.contains("$")
+            //       || !name.contains("*") || !name.contains("´") || !name.contains("`") || !name.contains("?") || !name.contains("!") || !name.contains(".") || !name.contains(",") || !name.contains(";") || !name.contains("<") || !name.contains(">")
+            //        || !name.contains("|") || !name.contains("^") || !name.contains("°") || !name.contains("²") || !name.contains("³") || !name.contains("%") || !name.contains("ß") || !name.contains("+") || !name.contains("~") || !name.contains("§")){
+                DataFile.addBuildingWorldID();
+
+                Queue.add(new BuildingWorld(new BuildingWorldData(null, null, (OfflinePlayer) event.getWhoClicked(), new ArrayList<>(), name, DataFile.getCurrentBuildingWorldID()), true));
             }else{
-                //TODO MESSAGE
+                event.getWhoClicked().closeInventory();
+                chatInputPlayers.add((Player) event.getWhoClicked());
+                event.getWhoClicked().sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Bitte gebe den Namen der Bau-Welt ein! Gebe <bold>abbrechen</bold> ein, um abzubrechen!"));
             }
         }else if(event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.NAME_TAG){
             event.getWhoClicked().closeInventory();

@@ -35,7 +35,14 @@ public class BuildingWorldMemberGUI1 {
         int count = 0;
 
         for(BuildingWorldData data : DataFile.getAllWorldData().values()) {
-            if (data.getOwner().equals(player)) {
+            if(!player.hasPermission("building.world.members.bypass")){
+                if (data.getOwner().equals(player)) {
+                    count++;
+                    if (count != 54) {
+                        guiP1.addItem(getWorldItem(data));
+                    }
+                }
+            }else{
                 count++;
                 if (count != 54) {
                     guiP1.addItem(getWorldItem(data));

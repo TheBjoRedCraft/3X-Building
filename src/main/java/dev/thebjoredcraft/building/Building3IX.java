@@ -14,6 +14,7 @@ package dev.thebjoredcraft.building;
  */
 
 
+import dev.thebjoredcraft.building.data.DataFile;
 import dev.thebjoredcraft.building.logger.LoggerCommand;
 import dev.thebjoredcraft.building.speed.SpeedCommand;
 import dev.thebjoredcraft.building.world.BuildingWorldCommand;
@@ -34,10 +35,9 @@ public final class Building3IX extends JavaPlugin {
     @Override
     public void onEnable() {
         saveDefaultConfig();
+        DataFile.save();
 
         getCommand("bworld").setExecutor(new BuildingWorldCommand());
-        getCommand("logger").setExecutor(new LoggerCommand());
-        getCommand("speed").setExecutor(new SpeedCommand());
 
         Bukkit.getPluginManager().registerEvents(new BuildingWorldGUIHandler(), this);
         // Plugin startup logic
@@ -47,6 +47,7 @@ public final class Building3IX extends JavaPlugin {
     @Override
     public void onDisable() {
         saveDefaultConfig();
+        DataFile.save();
         // Plugin shutdown logic
     }
     public static Building3IX getInstance() {

@@ -25,43 +25,51 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
+import javax.xml.crypto.Data;
 import java.util.*;
 
-public class BuildingWorldCommand implements CommandExecutor {
+public class BuildingWorldCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
         if(sender instanceof Player player) {
             if (args.length == 2 && args[0].equalsIgnoreCase("create")) {
 
                 DataFile.addBuildingWorldID();
-                Queue.add(new BuildingWorld(new BuildingWorldData(null, null, player, new ArrayList<>(), args[1], DataFile.getCurrentBuildingWorldID())));
+                Queue.add(new BuildingWorld(new BuildingWorldData(null, null, player, new ArrayList<>(), args[1], DataFile.getCurrentBuildingWorldID()), true));
 
             }else if(args.length == 1 && args[0].equalsIgnoreCase("create")){
                 BuildingWorldCreateGUI.open(player, null);
-            }else if(args.length == 2 && args[1].equalsIgnoreCase("delete")){
-                BuildingWorldManager.delete(args[0]);
-                player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Die Bau-Welt wurde gelöscht!"));
-            }else if(args.length == 2 && args[1].equalsIgnoreCase("visit") || args.length == 2 && args[1].equalsIgnoreCase("v")){
-                BuildingWorldManager.visit(player, args[0]);
+            }else if(args.length == 2 && args[0].equalsIgnoreCase("delete")){
+                if(DataFile.getAllWorldData().containsKey(args[1])){
+                    BuildingWorldManager.delete(args[1]);
+                    player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Die Bau-Welt wurde gelöscht!"));
+                }else{
+                    player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Die Bau-Welt wurde nicht gefunden."));
+                }
+            }else if(args.length == 2 && args[0].equalsIgnoreCase("visit") || args.length == 2 && args[0].equalsIgnoreCase("v")){
+                BuildingWorldManager.visit(player, args[1]);
             }else if(args.length == 1 && args[0].equalsIgnoreCase("visit") || args.length == 1 && args[0].equalsIgnoreCase("v")){
                 BuildingWorldVisitGUI.openPageOne(player);
-            }else if(args.length == 2 && args[1].equalsIgnoreCase("info")){
-                BuildingWorldManager.info(player, args[0]);
-            }else if(args.length == 4 && args[1].equalsIgnoreCase("members") && args[2].equalsIgnoreCase("add")){
+            }else if(args.length == 2 && args[0].equalsIgnoreCase("info")){
+                BuildingWorldManager.info(player, args[1]);
+            }else if(args.length == 4 && args[0].equalsIgnoreCase("members") && args[1].equalsIgnoreCase("add")){
                 Player target = Bukkit.getPlayer(args[3]);
                 if(target != null){
-                    BuildingWorldManager.addMember(target, args[0]);
+                    BuildingWorldManager.addMember(target, args[2]);
                     player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Der Spieler wurde hinzugefügt"));
                 }else{
                     player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Der Spieler wurde nicht gefunden!"));
                 }
-            }else if(args.length == 4 && args[1].equalsIgnoreCase("members") && args[2].equalsIgnoreCase("remove")){
+            }else if(args.length == 4 && args[0].equalsIgnoreCase("members") && args[1].equalsIgnoreCase("remove")){
                 Player target = Bukkit.getPlayer(args[3]);
                 if(target != null){
-                    BuildingWorldManager.removeMember(target, args[0]);
+                    BuildingWorldManager.removeMember(target, args[2]);
                     player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Der Spieler wurde entfernt"));
                 }else{
                     player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Der Spieler wurde nicht gefunden!"));
@@ -71,5 +79,24 @@ public class BuildingWorldCommand implements CommandExecutor {
             }
         }
         return false;
+    }
+    private final String[] defaultCompletions = new String[]{"delete", "create", "visit", "info", "members" };
+    private final String[] membersCompletions = new String[]{"add", "remove"};
+
+    @Override
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        List<String> completions = new ArrayList<>();
+        List<String> buildingWorldNames = new ArrayList<>();
+        List<String> onlinePlayerNames = new ArrayList<>();
+
+        for(BuildingWorldData data : DataFile.getAllWorldData().values()){
+            buildingWorldNames.add(data.getDisplayName());
+        }
+        for(Player player : Bukkit.getOnlinePlayers()){
+            onlinePlayerNames.add(player.getName());
+        }
+        //TODO
+        Collections.sort(completions);
+        return completions;
     }
 }

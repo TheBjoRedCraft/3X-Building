@@ -16,7 +16,6 @@ package dev.thebjoredcraft.building.data;
 
 import dev.thebjoredcraft.building.Building3IX;
 import dev.thebjoredcraft.building.server.Console;
-import dev.thebjoredcraft.building.world.BuildingWorld;
 import dev.thebjoredcraft.building.world.BuildingWorldData;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -39,6 +38,9 @@ public class DataFile  {
 
     public static void saveFile() throws IOException {
         fileConfig.save(dataFile);
+    }
+    public static void save(){
+        Building3IX.getInstance().saveResource("data.yml", false);
     }
     public static void writeWorldData(BuildingWorldData data) {
         List<String> uuids = new ArrayList<>();
@@ -111,14 +113,13 @@ public class DataFile  {
     }
     public static void addBuildingWorldID(){
         Building3IX.getInstance().saveResource("data.yml", false);
-        int configID = fileConfig.getInt("worlds.currentID");
-        int id = configID ++;
+        int configID = getCurrentBuildingWorldID();
 
-        fileConfig.set("worlds.currentID", id);
+        configID ++;
 
-        Building3IX.getInstance().saveResource("data.yml", false);
+        fileConfig.set("currentID", configID);
     }
     public static Integer getCurrentBuildingWorldID(){
-        return fileConfig.getInt("worlds.currentID");
+        return fileConfig.getInt("currentID");
     }
 }

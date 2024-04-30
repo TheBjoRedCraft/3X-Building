@@ -18,6 +18,7 @@ import dev.thebjoredcraft.building.Building3IX;
 import dev.thebjoredcraft.building.data.DataFile;
 import dev.thebjoredcraft.building.message.MessageUtil;
 import dev.thebjoredcraft.building.server.Console;
+import dev.thebjoredcraft.building.server.Debugger;
 import dev.thebjoredcraft.building.world.queue.Queue;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.title.Title;
@@ -31,11 +32,13 @@ import java.util.HashMap;
 public class BuildingWorldManager {
     public static void create(BuildingWorldData data){
         Player owner = data.getOwner().getPlayer();
+        Debugger.debug("1-title");
 
         owner.showTitle(Title.title(MiniMessage.miniMessage().deserialize("<red>Bitte warte einen Moment..."), MiniMessage.miniMessage().deserialize("...<green>Deine Welt wird erstellt!")));
         World world = Bukkit.createWorld(new WorldCreator(data.getDisplayName() + data.getId()).type(WorldType.FLAT));
 
         owner.showTitle(Title.title(MiniMessage.miniMessage().deserialize("<red>Bitte warte einen Moment..."), MiniMessage.miniMessage().deserialize("...<green>Du wirst teleportiert!")));
+        Debugger.debug("2-title");
         owner.teleport(world.getSpawnLocation());
 
         Queue.remove(data.getBuildingWorld());
@@ -115,7 +118,7 @@ public class BuildingWorldManager {
         BuildingWorld bWorld = null;
         for(BuildingWorldData data : DataFile.getAllWorldData().values()){
             if(data.getId() == id){
-                bWorld = new BuildingWorld(new BuildingWorldData(data.getWorld(), data.getBuildingWorld(), data.getOwner(), data.getPlayers(), data.getDisplayName(), data.getId()));
+                bWorld = new BuildingWorld(new BuildingWorldData(data.getWorld(), data.getBuildingWorld(), data.getOwner(), data.getPlayers(), data.getDisplayName(), data.getId()), false);
             }
         }
         return bWorld;
