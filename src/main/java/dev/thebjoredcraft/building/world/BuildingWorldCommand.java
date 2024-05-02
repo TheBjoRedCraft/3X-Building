@@ -16,12 +16,15 @@ package dev.thebjoredcraft.building.world;
 
 import dev.thebjoredcraft.building.data.DataFile;
 import dev.thebjoredcraft.building.message.MessageUtil;
+import dev.thebjoredcraft.building.server.Debugger;
+import dev.thebjoredcraft.building.util.OnlinePlayers;
 import dev.thebjoredcraft.building.world.gui.BuildingWorldCreateGUI;
 import dev.thebjoredcraft.building.world.gui.BuildingWorldGUI;
 import dev.thebjoredcraft.building.world.gui.BuildingWorldVisitGUI;
 import dev.thebjoredcraft.building.world.queue.Queue;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -31,7 +34,6 @@ import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import javax.xml.crypto.Data;
 import java.util.*;
 
 public class BuildingWorldCommand implements CommandExecutor, TabCompleter {
@@ -39,63 +41,84 @@ public class BuildingWorldCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
         if(sender instanceof Player player) {
             if (args.length == 2 && args[0].equalsIgnoreCase("create")) {
+                if(player.hasPermission("building.world.command.create")) {
 
-                DataFile.addBuildingWorldID();
-                Queue.add(new BuildingWorld(new BuildingWorldData(null, null, player, new ArrayList<>(), args[1], DataFile.getCurrentBuildingWorldID()), true));
-
+                    DataFile.addBuildingWorldID();
+                    Queue.add(new BuildingWorld(new BuildingWorldData(null, null, player, new ArrayList<>(), args[1], DataFile.getCurrentBuildingWorldID()), true));
+                }
             }else if(args.length == 1 && args[0].equalsIgnoreCase("create")){
-                BuildingWorldCreateGUI.open(player, null);
+                if(player.hasPermission("building.world.command.create")) {
+                    BuildingWorldCreateGUI.open(player, null);
+                }
             }else if(args.length == 2 && args[0].equalsIgnoreCase("delete")){
-                if(DataFile.getAllWorldData().containsKey(args[1])){
-                    BuildingWorldManager.delete(args[1]);
-                    player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Die Bau-Welt wurde gelöscht!"));
-                }else{
-                    player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Die Bau-Welt wurde nicht gefunden."));
+                if(player.hasPermission("building.world.command.delete")) {
+                    if (DataFile.getAllWorldData().containsKey(args[1])) {
+                        BuildingWorldManager.delete(args[1]);
+                        player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Die Bau-Welt wurde gelöscht!"));
+                    } else {
+                        player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Die Bau-Welt wurde nicht gefunden."));
+                    }
                 }
             }else if(args.length == 2 && args[0].equalsIgnoreCase("visit") || args.length == 2 && args[0].equalsIgnoreCase("v")){
-                BuildingWorldManager.visit(player, args[1]);
+                if(player.hasPermission("building.world.command.visit")) {
+                    BuildingWorldManager.visit(player, args[1]);
+                }
             }else if(args.length == 1 && args[0].equalsIgnoreCase("visit") || args.length == 1 && args[0].equalsIgnoreCase("v")){
-                BuildingWorldVisitGUI.openPageOne(player);
+                if(player.hasPermission("building.world.command.visit")) {
+                    BuildingWorldVisitGUI.openPageOne(player);
+                }
             }else if(args.length == 2 && args[0].equalsIgnoreCase("info")){
                 BuildingWorldManager.info(player, args[1]);
             }else if(args.length == 4 && args[0].equalsIgnoreCase("members") && args[1].equalsIgnoreCase("add")){
-                Player target = Bukkit.getPlayer(args[3]);
-                if(target != null){
+                if(player.hasPermission("building.world.command.members.add")) {
+                    OfflinePlayer target = Bukkit.getOfflinePlayer(args[3]);
+
                     BuildingWorldManager.addMember(target, args[2]);
                     player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Der Spieler wurde hinzugefügt"));
-                }else{
-                    player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Der Spieler wurde nicht gefunden!"));
                 }
-            }else if(args.length == 4 && args[0].equalsIgnoreCase("members") && args[1].equalsIgnoreCase("remove")){
-                Player target = Bukkit.getPlayer(args[3]);
-                if(target != null){
+            }else if(args.length == 4 && args[0].equalsIgnoreCase("members") && args[1].equalsIgnoreCase("remove")) {
+                if (player.hasPermission("building.world.command.members.remove")) {
+                    OfflinePlayer target = Bukkit.getOfflinePlayer(args[3]);
+
                     BuildingWorldManager.removeMember(target, args[2]);
                     player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Der Spieler wurde entfernt"));
-                }else{
-                    player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Der Spieler wurde nicht gefunden!"));
                 }
-            }else{
-                BuildingWorldGUI.open(player);
+            }else if(args.length == 1 && args[0].equalsIgnoreCase("compass") || args.length == 1 && args[0].equalsIgnoreCase("c") ){
+                if(player.hasPermission("building.world.command.compass")) {
+                    Compass.give(player);
+                }
+            } else {
+                if (player.hasPermission("building.world.command.gui")) {
+                    BuildingWorldGUI.open(player);
+                }
+                player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Falsche Argumente!"));
             }
         }
         return false;
     }
-    private final String[] defaultCompletions = new String[]{"delete", "create", "visit", "info", "members" };
-    private final String[] membersCompletions = new String[]{"add", "remove"};
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         List<String> completions = new ArrayList<>();
         List<String> buildingWorldNames = new ArrayList<>();
-        List<String> onlinePlayerNames = new ArrayList<>();
 
         for(BuildingWorldData data : DataFile.getAllWorldData().values()){
             buildingWorldNames.add(data.getDisplayName());
         }
-        for(Player player : Bukkit.getOnlinePlayers()){
-            onlinePlayerNames.add(player.getName());
+
+        if (args.length == 1) {
+            return StringUtil.copyPartialMatches(args[0], Arrays.asList("create", "delete", "visit", "info", "members", "compass"), new ArrayList<>());
+        } else if (args.length == 2) {
+            if (args[0].equalsIgnoreCase("delete") || args[0].equalsIgnoreCase("visit") || args[0].equalsIgnoreCase("info")) {
+                return StringUtil.copyPartialMatches(args[1], buildingWorldNames, new ArrayList<>());
+            } else if (args[0].equalsIgnoreCase("members")) {
+                return StringUtil.copyPartialMatches(args[1], Arrays.asList("add", "remove"), new ArrayList<>());
+            }
+        } else if (args.length == 3 && args[0].equalsIgnoreCase("members")) {
+            return StringUtil.copyPartialMatches(args[2], buildingWorldNames, new ArrayList<>());
+        } else if (args.length == 4 && args[0].equalsIgnoreCase("members")) {
+            return StringUtil.copyPartialMatches(args[3], OnlinePlayers.getAllOnlinePlayerNamesEver(), new ArrayList<>());
         }
-        //TODO
         Collections.sort(completions);
         return completions;
     }

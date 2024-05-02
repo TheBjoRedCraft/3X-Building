@@ -18,7 +18,6 @@ import dev.thebjoredcraft.building.Building3IX;
 import dev.thebjoredcraft.building.data.DataFile;
 import dev.thebjoredcraft.building.message.MessageUtil;
 import dev.thebjoredcraft.building.server.Console;
-import dev.thebjoredcraft.building.server.Debugger;
 import dev.thebjoredcraft.building.world.queue.Queue;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.title.Title;
@@ -59,8 +58,10 @@ public class BuildingWorldManager {
         if(bWorlds.containsKey(displayName)){
             BuildingWorldData data = bWorlds.get(displayName);
 
-            data.getPlayers().add(player);
-            DataFile.writeWorldData(data);
+            if(!data.getPlayers().contains(player)){
+                data.getPlayers().add(player);
+                DataFile.writeWorldData(data);
+            }
         }
     }
     public static void removeMember(OfflinePlayer player, String displayName) {
@@ -120,5 +121,11 @@ public class BuildingWorldManager {
             }
         }
         return bWorld;
+    }
+    public static void loadAllWorlds(){
+        for(BuildingWorldData data : DataFile.getAllWorldData().values()){
+            Bukkit.createWorld(new WorldCreator(data.getDisplayName() + data.getId()));
+            Console.log("Loaded or created World " + data.getDisplayName() + data.getId() + "...");
+        }
     }
 }

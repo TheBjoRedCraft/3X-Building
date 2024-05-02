@@ -36,7 +36,6 @@ public class BuildingWorldMemberGUI2 {
     public static void open(Player player, String displayName){
         guiP1 = Bukkit.createInventory(null, 54, MiniMessage.miniMessage().deserialize("<red>Mitglieder entfernen"));
         int count = 0;
-
         for(OfflinePlayer target : DataFile.getAllWorldData().get(displayName).getPlayers()) {
             count++;
             if (count != 52 && !target.equals(player)) {

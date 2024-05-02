@@ -39,7 +39,6 @@ public class BuildingWorldVisitGUI {
         int count = 0;
         for(BuildingWorldData data : DataFile.getAllWorldData().values()){
             count ++;
-            Debugger.debug(count);
             if(count != 54){
                 guiP1.addItem(getWorldItem(data));
             }

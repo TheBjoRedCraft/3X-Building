@@ -20,6 +20,7 @@ import dev.thebjoredcraft.building.world.BuildingWorldData;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
+import org.bukkit.WorldCreator;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -91,20 +92,15 @@ public class DataFile  {
                 int id = fileConfig.getInt(path + ".id");
 
                 for (String playerUUID : playerUUIDs) {
-                    OfflinePlayer player = Bukkit.getPlayer(UUID.fromString(playerUUID));
-                    if (player != null) {
-                        players.add(player);
-                    }
+                    OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(playerUUID));
+                    players.add(player);
                 }
-                if(owner != null) {
-                    if (world != null) {
-                        BuildingWorldData worldData = new BuildingWorldData(world, null, owner, players, displayName, id);
-                        worldDataList.put(worldData.getDisplayName(), worldData);
-                    } else {
-                        Console.logError("Fehler beim laden der BuildingWordData von data.yml (" + key + "): BukkitWorld (" + fileConfig.getString(path + ".bukkitWorld") + ") wurde nicht gefunden!");
-                    }
+                if (world != null) {
+                    BuildingWorldData worldData = new BuildingWorldData(world, null, owner, players, displayName, id);
+                    worldDataList.put(worldData.getDisplayName(), worldData);
                 } else {
-                    Console.logError("Fehler beim laden der BuildingWordData von data.yml (" + key + "): Owner (" + fileConfig.getString(path + ".bukkitWorld") + ") wurde nicht gefunden!");
+                    Console.log("Loaded or created World " + fileConfig.getString(path + ".bukkitWorld") + "...");
+                    Bukkit.createWorld(new WorldCreator(fileConfig.getString(path + ".bukkitWorld")));
                 }
             }
         }
