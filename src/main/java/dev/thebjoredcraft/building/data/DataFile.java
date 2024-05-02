@@ -118,4 +118,13 @@ public class DataFile  {
     public static Integer getCurrentBuildingWorldID(){
         return fileConfig.getInt("currentID");
     }
+    public static List<String> getAllOnlinePlayerNamesEver(){
+        return new ArrayList<>(fileConfig.getStringList("allEverOnlinePlayers"));
+    }
+    public static void addToOnlinePlayersEver(OfflinePlayer player){
+        List<String> players = fileConfig.getStringList("allEverOnlinePlayers");
+        if(!players.contains(player.getName())) {
+            players.add(player.getName());
+        }
+    }
 }
