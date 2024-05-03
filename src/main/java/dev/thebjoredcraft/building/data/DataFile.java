@@ -16,6 +16,7 @@ package dev.thebjoredcraft.building.data;
 
 import dev.thebjoredcraft.building.Building3IX;
 import dev.thebjoredcraft.building.server.Console;
+import dev.thebjoredcraft.building.server.Debugger;
 import dev.thebjoredcraft.building.world.BuildingWorldData;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -122,9 +123,25 @@ public class DataFile  {
         return new ArrayList<>(fileConfig.getStringList("allEverOnlinePlayers"));
     }
     public static void addToOnlinePlayersEver(OfflinePlayer player){
-        List<String> players = fileConfig.getStringList("allEverOnlinePlayers");
+        List<String> players = getAllOnlinePlayerNamesEver();
+        Debugger.debug(players);
+        Debugger.debug(1);
+
         if(!players.contains(player.getName())) {
             players.add(player.getName());
+            Debugger.debug(players);
+            Debugger.debug(2);
         }
+        Debugger.debug(players);
+        Debugger.debug(3);
+        fileConfig.set("allEverOnlinePlayers", players);
+
+        try {
+            saveFile();
+        } catch (IOException e) {
+            Console.logError(e.getMessage());
+        }
+
+        Debugger.debug(getAllOnlinePlayerNamesEver());
     }
 }

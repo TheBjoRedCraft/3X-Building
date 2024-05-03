@@ -14,11 +14,19 @@ package dev.thebjoredcraft.building.server;
  */
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Debugger {
     public static void debug(String arg){
         Console.log(arg);
     }
     public static void debug(Integer arg){
         Console.log(arg);
+    }
+    public static void debug(List<String> arg){
+        for(String args : arg){
+            Console.log(args);
+        }
     }
 }

@@ -37,9 +37,10 @@ public class BuildingWorldMemberGUI3 {
         guiP1 = Bukkit.createInventory(null, 54, MiniMessage.miniMessage().deserialize("<red>Mitglieder hinzufügen"));
         int count = 0;
 
-        for(Player target : Bukkit.getOnlinePlayers()){
+        for(String playerN : DataFile.getAllOnlinePlayerNamesEver()){
+            OfflinePlayer target = Bukkit.getOfflinePlayer(playerN);
             count ++;
-            if(count != 52 && target != player && !DataFile.getAllWorldData().get(displayName).getPlayers().contains(target)){
+            if(count != 52 && !DataFile.getAllWorldData().get(displayName).getPlayers().contains(target) && getPlayerItem(target, displayName) != null){
                 guiP1.addItem(getPlayerItem(target, displayName));
             }
         }
@@ -70,8 +71,12 @@ public class BuildingWorldMemberGUI3 {
         List<Component> lore = new ArrayList<>();
 
         lore.add(MiniMessage.miniMessage().deserialize("<gray>Clicke, um den Spieler hinzuzufügen!"));
-
-        sMeta.setOwningPlayer(player);
+        try {
+            sMeta.setOwningPlayer(player);
+        }catch (NullPointerException ignored){
+            //IGNORED - PLAYERNAME NOT FOUND
+            return null;
+        }
         sMeta.setDisplayName(player.getName());
         sMeta.lore(lore);
         sMeta.setCustomModelData(DataFile.getAllWorldData().get(displayName).getId());

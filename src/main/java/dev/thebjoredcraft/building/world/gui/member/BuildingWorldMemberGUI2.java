@@ -13,7 +13,6 @@ package dev.thebjoredcraft.building.world.gui.member;
  */
 
 import dev.thebjoredcraft.building.data.DataFile;
-import dev.thebjoredcraft.building.server.Debugger;
 import dev.thebjoredcraft.building.world.BuildingWorldData;
 import dev.thebjoredcraft.building.world.BuildingWorldManager;
 import net.kyori.adventure.text.Component;
@@ -39,7 +38,9 @@ public class BuildingWorldMemberGUI2 {
         for(OfflinePlayer target : DataFile.getAllWorldData().get(displayName).getPlayers()) {
             count++;
             if (count != 52 && !target.equals(player)) {
-                guiP1.addItem(getPlayerItem(target, displayName));
+                if(getPlayerItem(target, displayName) != null) {
+                    guiP1.addItem(getPlayerItem(target, displayName));
+                }
             }
         }
         ItemStack owner = new ItemStack(Material.GREEN_STAINED_GLASS_PANE);
@@ -70,10 +71,14 @@ public class BuildingWorldMemberGUI2 {
                 BuildingWorldManager.removeMember(Bukkit.getOfflinePlayer(event.getCurrentItem().getItemMeta().getDisplayName()), current.getDisplayName());
                 open((Player) event.getWhoClicked(), current.getDisplayName());
             }else{
-                BuildingWorldMemberGUI3.open((Player) event.getWhoClicked(), BuildingWorldManager.getByID(event.getCurrentItem().getItemMeta().getCustomModelData()).getData().getDisplayName());
+                if(event.getCurrentItem() != null) {
+                    BuildingWorldMemberGUI3.open((Player) event.getWhoClicked(), BuildingWorldManager.getByID(event.getCurrentItem().getItemMeta().getCustomModelData()).getData().getDisplayName());
+                }
             }
         }else{
-            BuildingWorldMemberGUI3.open((Player) event.getWhoClicked(), BuildingWorldManager.getByID(event.getCurrentItem().getItemMeta().getCustomModelData()).getData().getDisplayName());
+            if(event.getCurrentItem() != null) {
+                BuildingWorldMemberGUI3.open((Player) event.getWhoClicked(), BuildingWorldManager.getByID(event.getCurrentItem().getItemMeta().getCustomModelData()).getData().getDisplayName());
+            }
         }
     }
     public static ItemStack getPlayerItem(OfflinePlayer player, String displayName){
@@ -83,7 +88,12 @@ public class BuildingWorldMemberGUI2 {
 
         lore.add(MiniMessage.miniMessage().deserialize("<gray>Clicke, um den Spieler zu entfernen!"));
 
-        sMeta.setOwningPlayer(player);
+        try {
+            sMeta.setOwningPlayer(player);
+        }catch (NullPointerException ignored){
+            //IGNORED - PLAYERNAME NOT FOUND
+            return null;
+        }
         sMeta.setDisplayName(player.getName());
         sMeta.lore(lore);
         sMeta.setCustomModelData(DataFile.getAllWorldData().get(displayName).getId());

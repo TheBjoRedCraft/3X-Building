@@ -16,8 +16,6 @@ package dev.thebjoredcraft.building.world;
 
 import dev.thebjoredcraft.building.data.DataFile;
 import dev.thebjoredcraft.building.message.MessageUtil;
-import dev.thebjoredcraft.building.server.Debugger;
-import dev.thebjoredcraft.building.util.OnlinePlayers;
 import dev.thebjoredcraft.building.world.gui.BuildingWorldCreateGUI;
 import dev.thebjoredcraft.building.world.gui.BuildingWorldGUI;
 import dev.thebjoredcraft.building.world.gui.BuildingWorldVisitGUI;
@@ -45,10 +43,14 @@ public class BuildingWorldCommand implements CommandExecutor, TabCompleter {
 
                     DataFile.addBuildingWorldID();
                     Queue.add(new BuildingWorld(new BuildingWorldData(null, null, player, new ArrayList<>(), args[1], DataFile.getCurrentBuildingWorldID()), true));
+                }else{
+                    player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Dazu hast du leider keine Rechte."));
                 }
             }else if(args.length == 1 && args[0].equalsIgnoreCase("create")){
                 if(player.hasPermission("building.world.command.create")) {
                     BuildingWorldCreateGUI.open(player, null);
+                }else{
+                    player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Dazu hast du leider keine Rechte."));
                 }
             }else if(args.length == 2 && args[0].equalsIgnoreCase("delete")){
                 if(player.hasPermission("building.world.command.delete")) {
@@ -58,14 +60,20 @@ public class BuildingWorldCommand implements CommandExecutor, TabCompleter {
                     } else {
                         player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Die Bau-Welt wurde nicht gefunden."));
                     }
+                }else{
+                    player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Dazu hast du leider keine Rechte."));
                 }
             }else if(args.length == 2 && args[0].equalsIgnoreCase("visit") || args.length == 2 && args[0].equalsIgnoreCase("v")){
                 if(player.hasPermission("building.world.command.visit")) {
                     BuildingWorldManager.visit(player, args[1]);
+                }else{
+                    player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Dazu hast du leider keine Rechte."));
                 }
             }else if(args.length == 1 && args[0].equalsIgnoreCase("visit") || args.length == 1 && args[0].equalsIgnoreCase("v")){
                 if(player.hasPermission("building.world.command.visit")) {
                     BuildingWorldVisitGUI.openPageOne(player);
+                }else{
+                    player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Dazu hast du leider keine Rechte."));
                 }
             }else if(args.length == 2 && args[0].equalsIgnoreCase("info")){
                 BuildingWorldManager.info(player, args[1]);
@@ -75,6 +83,8 @@ public class BuildingWorldCommand implements CommandExecutor, TabCompleter {
 
                     BuildingWorldManager.addMember(target, args[2]);
                     player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Der Spieler wurde hinzugefügt"));
+                }else{
+                    player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Dazu hast du leider keine Rechte."));
                 }
             }else if(args.length == 4 && args[0].equalsIgnoreCase("members") && args[1].equalsIgnoreCase("remove")) {
                 if (player.hasPermission("building.world.command.members.remove")) {
@@ -82,14 +92,26 @@ public class BuildingWorldCommand implements CommandExecutor, TabCompleter {
 
                     BuildingWorldManager.removeMember(target, args[2]);
                     player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Der Spieler wurde entfernt"));
+                }else{
+                    player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Dazu hast du leider keine Rechte."));
                 }
             }else if(args.length == 1 && args[0].equalsIgnoreCase("compass") || args.length == 1 && args[0].equalsIgnoreCase("c") ){
                 if(player.hasPermission("building.world.command.compass")) {
                     Compass.give(player);
+                }else{
+                    player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Dazu hast du leider keine Rechte."));
                 }
-            } else {
+            } else if(args.length == 0){
                 if (player.hasPermission("building.world.command.gui")) {
                     BuildingWorldGUI.open(player);
+                }else{
+                    player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Dazu hast du leider keine Rechte."));
+                }
+            }else {
+                if (player.hasPermission("building.world.command.gui")) {
+                    BuildingWorldGUI.open(player);
+                }else{
+                    player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Dazu hast du leider keine Rechte."));
                 }
                 player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Falsche Argumente!"));
             }
@@ -117,7 +139,7 @@ public class BuildingWorldCommand implements CommandExecutor, TabCompleter {
         } else if (args.length == 3 && args[0].equalsIgnoreCase("members")) {
             return StringUtil.copyPartialMatches(args[2], buildingWorldNames, new ArrayList<>());
         } else if (args.length == 4 && args[0].equalsIgnoreCase("members")) {
-            return StringUtil.copyPartialMatches(args[3], OnlinePlayers.getAllOnlinePlayerNamesEver(), new ArrayList<>());
+            return StringUtil.copyPartialMatches(args[3], DataFile.getAllOnlinePlayerNamesEver(), new ArrayList<>());
         }
         Collections.sort(completions);
         return completions;

@@ -18,7 +18,6 @@ import dev.thebjoredcraft.building.Building3IX;
 import dev.thebjoredcraft.building.data.DataFile;
 import dev.thebjoredcraft.building.message.MessageUtil;
 import dev.thebjoredcraft.building.server.Console;
-import dev.thebjoredcraft.building.util.OnlinePlayers;
 import dev.thebjoredcraft.building.world.gui.BuildingWorldCreateGUI;
 import dev.thebjoredcraft.building.world.gui.BuildingWorldGUI;
 import dev.thebjoredcraft.building.world.gui.BuildingWorldVisitGUI;
@@ -156,6 +155,6 @@ public class BuildingWorldHandler implements Listener {
             Bukkit.createWorld(new WorldCreator(Building3IX.getInstance().getConfig().getString("LobbyWorld", "")));
             Console.log("Loaded or created World (LobbyWorld) " + Building3IX.getInstance().getConfig().getString("LobbyWorld", ""));
         }
-        OnlinePlayers.addOnlinePlayersEver(event.getPlayer());
+        DataFile.addToOnlinePlayersEver(event.getPlayer());
     }
 }

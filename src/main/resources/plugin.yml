@@ -3,6 +3,10 @@ version: '${version}'
 main: dev.thebjoredcraft.building.Building3IX
 api-version: '1.20'
 author: TheBjoRedCraft
+website: https://github.com/TheBjoRedCraft
+description: Ein Plugin für den Bau-Server von Dreix31
 commands:
+  dreixbuilding:
+    permission: building.command
   bworld:
     permission: building.world.command
