@@ -77,12 +77,7 @@ public class BuildingWorldCreateGUI {
         if(event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.LIME_CONCRETE_POWDER){
             String name = event.getClickedInventory().getItem(13).getItemMeta().getDisplayName();
             if(!event.getClickedInventory().getItem(13).getItemMeta().displayName().equals(MiniMessage.miniMessage().deserialize("<color:#40d1db>Name (Clicken zum Eingeben)"))){
-                DataFile.addBuildingWorldID();
-
-                Queue.add(new BuildingWorld(new BuildingWorldData(null, null, (OfflinePlayer) event.getWhoClicked(), new ArrayList<>(), name, DataFile.getCurrentBuildingWorldID()), true));
-            //if(!name.contains("{") || !name.contains("}") || !name.contains("[") || !name.contains("]") || !name.contains("(") || !name.contains(")") || !name.contains("/") || !name.contains("&") || !name.contains("$")
-            //       || !name.contains("*") || !name.contains("´") || !name.contains("`") || !name.contains("?") || !name.contains("!") || !name.contains(".") || !name.contains(",") || !name.contains(";") || !name.contains("<") || !name.contains(">")
-            //        || !name.contains("|") || !name.contains("^") || !name.contains("°") || !name.contains("²") || !name.contains("³") || !name.contains("%") || !name.contains("ß") || !name.contains("+") || !name.contains("~") || !name.contains("§")){
+                event.getWhoClicked().closeInventory();
                 DataFile.addBuildingWorldID();
 
                 Queue.add(new BuildingWorld(new BuildingWorldData(null, null, (OfflinePlayer) event.getWhoClicked(), new ArrayList<>(), name, DataFile.getCurrentBuildingWorldID()), true));
@@ -98,7 +93,6 @@ public class BuildingWorldCreateGUI {
 
         }else if(event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.RED_CONCRETE_POWDER){
             event.getWhoClicked().closeInventory();
-
         }
     }
 }

@@ -107,6 +107,14 @@ public class BuildingWorldCommand implements CommandExecutor, TabCompleter {
                 }else{
                     player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Dazu hast du leider keine Rechte."));
                 }
+            } else if(args.length == 2 && args[0].equalsIgnoreCase("import")){
+                if (player.hasPermission("building.world.command.import")) {
+                    BuildingWorldManager.importWorld(args[1], player);
+
+                    player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Deine Welt wurde importiert."));
+                }else{
+                    player.sendMessage(MiniMessage.miniMessage().deserialize(MessageUtil.PREFIX + "Dazu hast du leider keine Rechte."));
+                }
             }else {
                 if (player.hasPermission("building.world.command.gui")) {
                     BuildingWorldGUI.open(player);
@@ -129,7 +137,7 @@ public class BuildingWorldCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length == 1) {
-            return StringUtil.copyPartialMatches(args[0], Arrays.asList("create", "delete", "visit", "info", "members", "compass"), new ArrayList<>());
+            return StringUtil.copyPartialMatches(args[0], Arrays.asList("create", "delete", "visit", "info", "members", "compass", "import"), new ArrayList<>());
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("delete") || args[0].equalsIgnoreCase("visit") || args[0].equalsIgnoreCase("info")) {
                 return StringUtil.copyPartialMatches(args[1], buildingWorldNames, new ArrayList<>());

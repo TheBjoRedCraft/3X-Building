@@ -26,6 +26,7 @@ import org.bukkit.entity.Player;
 import org.codehaus.plexus.util.FileUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class BuildingWorldManager {
@@ -127,5 +128,21 @@ public class BuildingWorldManager {
             Bukkit.createWorld(new WorldCreator(data.getDisplayName() + data.getId()));
             Console.log("Loaded or created World " + data.getDisplayName() + data.getId() + "...");
         }
+    }
+    public static void importWorld(String world, Player player){
+        World bukkitWorld;
+        if(Bukkit.getWorld(world) == null) {
+            player.showTitle(Title.title(MiniMessage.miniMessage().deserialize("<red>Bitte warte einen Moment..."), MiniMessage.miniMessage().deserialize("...<green>Deine Welt wird importiert!")));
+            bukkitWorld = Bukkit.createWorld(new WorldCreator(world).type(WorldType.FLAT));
+
+            player.showTitle(Title.title(MiniMessage.miniMessage().deserialize("<red>Bitte warte einen Moment..."), MiniMessage.miniMessage().deserialize("...<green>Du wirst teleportiert!")));
+        }else{
+            bukkitWorld = Bukkit.getWorld(world);
+        }
+        player.teleport(bukkitWorld.getSpawnLocation());
+
+        DataFile.addBuildingWorldID();
+
+        DataFile.writeWorldData(new BuildingWorldData(bukkitWorld, null, player, new ArrayList<>(), world, DataFile.getCurrentBuildingWorldID()));
     }
 }
